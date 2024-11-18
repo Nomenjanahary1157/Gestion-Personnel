@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Reclassement</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Style de la barre de navigation */
+        .navbar-custom {
+            position: fixed;
+            width: 250px;
+            height: 100%;
+            background-color: #333;
+            color: white;
+            transition: width 0.3s ease;
+            overflow: hidden;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            padding-top: 20px;
+        }
+
+        /* Bouton pour rabattre la barre */
+        .toggle-btn {
+            position: absolute;
+            top: 10px;
+            right: -20px;
+            background-color: #333;
+            color: white;
+            font-size: 18px;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 50%;
+            z-index: 10;
+        }
+
+        /* Style des liens de navigation */
+        .navbar-custom a {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+
+        .navbar-custom a i {
+            margin-right: 10px; /* Espacement entre icône et texte */
+        }
+
+        .navbar-custom a:hover {
+            background-color: #444;
+        }
+
+        /* Style des sous-menus */
+        .dropdown-content {
+            display: none;
+            background-color: #444;
+            padding-left: 20px;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown.active .dropdown-content {
+            display: block;
+        }
+
+        /* Styles lorsque la barre est réduite */
+        .navbar-custom.collapsed {
+            width: 70px;
+        }
+
+        .navbar-custom.collapsed a {
+            justify-content: center;
+        }
+
+        .navbar-custom.collapsed a span {
+            display: none;
+        }
+
+        /* Rendre le tableau réactif */
+        .table-responsive {
+            overflow-x: auto; /* Permet de faire défiler horizontalement */
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #1fb89b;
+            color: white;
+        }
+
+        td {
+            word-wrap: break-word;
+        }
+
+        th, td {
+            max-width: 150px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        /* Ajustements responsives */
+        @media (max-width: 768px) {
+            .navbar-custom {
+                width: 100%;
+                height: auto;
+                position: static;
+            }
+            .navbar-custom.collapsed {
+                width: 100%;
+            }
+            .toggle-btn {
+                right: 10px;
+            }
+
+            .table-responsive {
+                -webkit-overflow-scrolling: auto;
+            }
+         
+        }
+
+        /* Style de la barre de recherche et du bouton */
+        .search-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .search-container input[type="text"] {
+            width: 300px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .add-button {
+            background-color: #1fb89b;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .add-button:hover {
+            background-color: #17a481;
+        }
+        .dropdown-content {
+            display: none;
+            background-color: #444;
+            padding-left: 20px;
+        }
+        .dropdown:hover .dropdown-content,
+        .dropdown.active .dropdown-content {
+            display: block;
+        }
+        /* Style des boutons Modifier et Supprimer avec icônes */
+        .action-button {
+            padding: 5px 10px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .edit-button {
+            background-color: #4CAF50; /* Vert pour Modifier */
+        }
+        .edit-button i {
+            color: white; /* Icon color */
+        }
+        .edit-button:hover {
+            background-color: #45a049;
+        }
+        .delete-button {
+            background-color: #f44336; /* Rouge pour Supprimer */
+        }
+        .delete-button i {
+            color: white; /* Icon color */
+        }
+        .delete-button:hover {
+            background-color: #da190b;
+        }
+        
+        /* Conteneur des boutons */
+        .button-group {
+            display: flex;
+            gap: 10px; /* Espacement entre les boutons */
+        }
+    
+        /* Style des boutons généraux */
+        .action-button {
+            border: none;
+            padding: 8px 12px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white; /* Texte blanc pour tous les boutons */
+        }
+    
+        /* Icônes des boutons */
+        .action-button i {
+            margin-right: 5px; /* Espacement entre l'icône et le texte */
+            font-size: 16px; /* Taille des icônes */
+        }
+    
+        /* Bouton Modifier (bleu) */
+        .edit-button {
+            background-color: #007bff; /* Bleu */
+        }
+        .edit-button:hover {
+            background-color: #0056b3;
+        }
+    
+        /* Bouton Supprimer (rouge) */
+        .delete-button {
+            background-color: #dc3545; /* Rouge */
+        }
+        .delete-button:hover {
+            background-color: #c82333;
+        }
+    
+        /* Bouton Informations (gris) */
+        .info-button {
+            background-color: #6c757d; /* Gris */
+        }
+        .info-button:hover {
+            background-color: #5a6268;
+        }
+    
+        /* Bouton Imprimer (vert) */
+        .print-button {
+            background-color: #28a745; /* Vert */
+        }
+        .print-button:hover {
+            background-color: #218838;
+        }
+
+        /* Bouton Imprimer (vert) */
+        .print-button {
+            background-color: #28a745; /* Vert */
+        }
+
+        .print-button:hover {
+            background-color: #218838;
+        }
+
+        .print-button i {
+            margin-right: 5px; /* Espacement entre l'icône et le texte */
+            font-size: 16px; /* Taille des icônes */
+        }
+
+        /* Bouton Information (bleu) */
+        .info-button {
+            background-color: #17a2b8; /* Bleu */
+        }
+
+        .info-button:hover {
+            background-color: #138496;
+        }
+
+        .info-button i {
+            margin-right: 5px; /* Espacement entre l'icône et le texte */
+            font-size: 16px; /* Taille des icônes */
+        }
+
+        /* Style du titre */
+        .titre, .sous-titre {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+        }
+        .container  {
+            margin-top: 5rem; /* Pour ajouter un peu de marge en haut */
+            margin-left: 280px; /* Par défaut, margin de 280px pour les grands écrans */
+        }
+    
+        /* Ajustement pour les écrans plus petits (tablettes et mobiles) */
+        @media (max-width: 768px) {
+            .container  {
+                margin-left: 0; /* Pas de marge à gauche pour les écrans plus petits */
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="navbar-custom" id="navbar">
+        <img src="{% static 'personnel/images/MNDPT.png' %}" alt="Gestion des Personnels" class="img-fluid w-100 mb-3">
+        <a href="{% url 'acceuil' %}"><i class="fas fa-home"></i><span>Accueil</span></a>
+        <div class="dropdown">
+            <a href="#" onclick="toggleDropdown(this)"><i class="fas fa-sitemap"></i><span>Directions</span></a>
+            <div class="dropdown-content">
+                <a href="{% url 'hierarchie' %}"><i class="fas fa-project-diagram"></i><span>Hiérarchie des directions</span></a>
+                <a href="{% url 'listDir' %}"><i class="fas fa-list-alt"></i><span>Liste des directions</span></a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <a href="#" onclick="toggleDropdown(this)"><i class="fas fa-user-cog"></i><span>Opérations RH</span></a>
+            <div class="dropdown-content">
+                <a href="{% url 'affectation' %}"><i class="fas fa-map-marker-alt"></i><span>Afféctation</span></a>
+                <a href="{% url 'detachement' %}"><i class="fas fa-exchange-alt"></i><span>Détachement</span></a>
+                <a href="{% url 'migration' %}"><i class="fas fa-exchange-alt"></i><span>Migration</span></a>
+                <a href="{% url 'reclassement' %}"><i class="fas fa-undo"></i><span>Reclassement</span></a>
+                <a href="{% url 'integration' %}"><i class="fas fa-user-plus"></i><span>Intégration</span></a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <a href="#" onclick="toggleDropdown(this)"><i class="fas fa-chart-bar"></i><span>Statistique</span></a>
+            <div class="dropdown-content">
+                <a href="{% url 'stat_personnel' %}"><i class="fas fa-users"></i><span>Personnels</span></a>
+                <a href="{% url 'stat_qualification' %}"><i class="fas fa-graduation-cap"></i><span>Qualification</span></a>
+                <a href="{% url 'stat_enfant' %}"><i class="fas fa-child"></i><span>Enfant</span></a>
+                <a href="{% url 'stat_fonction' %}"><i class="fas fa-briefcase"></i><span>Fonction</span></a>
+            </div>
+        </div>
+        <a href="{% url 'IA' %}"><i class="fas fa-brain"></i><span>IA</span></a>
+        <div class="dropdown">
+            <a href="#" onclick="toggleDropdown(this)"><i class="fas fa-cogs"></i><span>Administration</span></a>
+            <div class="dropdown-content">
+                <a href="{% url 'utilisateur' %}"><i class="fas fa-user-shield"></i><span>Compte utilisateur</span></a>
+                <a href="{% url 'categorie' %}"><i class="fas fa-th-list"></i><span>Catégorie</span></a>
+                <a href="{% url 'corps' %}"><i class="fas fa-user-tie"></i><span>Corps</span></a>
+                <a href="{% url 'budget' %}"><i class="fas fa-money-bill-wave"></i><span>Budget</span></a>
+                <a href="{% url 'fonction' %}"><i class="fas fa-tasks"></i><span>Fonctions</span></a>
+                <a href="{% url 'referentiel' %}"><i class="fas fa-book"></i><span>Référentiel d'indice EQUI-ECD</span></a>
+            </div>
+        </div>
+        <a href=""><i class="fas fa-sign-out-alt"></i><span>Déconnexion</span></a>
+    </div>
+    
+    <div class="container mt-5" >
+
+        <h1>Les Reclassements</h1>
+        <div class="search-container">
+            <input type="text" placeholder="Rechercher...">
+            <button class="add-button">Ajouter</button>
+        </div>
+        <div class="table-responsive">
+        <table id="directionsTable">
+            <thead>
+                <tr>
+                    <th>IM</th>
+                    <th>Corps</th>
+                    <th>Direction</th>
+                    <th>Photo</th>
+                    <th>Nom et prénoms</th>
+                    <th>Sexe</th>
+                    <th>Date d'entrée</th>
+                    <th>C E</th>
+                    <th>Date d'effet</th>
+                    <th>Fonction</th>
+                    <th>Qualification</th>
+                    <th>Catégorie</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>296428</td>
+                    <td>Encadreur</td>
+                    <td>DRH</td>
+                    <td></td>
+                    <td>RAJOBSON Johary Hoela</td>
+                    <td>Homme</td>
+                    <td>2002-12-26</td>
+                    <td>P/2</td>
+                    <td>2020-11-01</td>
+                    <td>Gardien</td>
+                    <td>BAE</td>
+                    <td>Catégorie 3</td>
+                    <td style="width:120px">
+                        <button class="action-button reclassement-button"><i class="fas fa-retweet"></i></button>
+                        <button class="action-button info-button" ><i class="fas fa-info-circle"></i> </button>
+                    </td>
+                </tr>
+            </tbody>
+        </div>
+    </div>
+        
+    <script>
+        function toggleDropdown(element) {
+            const dropdown = element.closest('.dropdown');
+            dropdown.classList.toggle('active');
+        }
+    
+    </script>
+</body>
+</html>

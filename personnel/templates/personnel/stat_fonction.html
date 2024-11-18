@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Statistique Fonction</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        #show-chart {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #1fb89b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        #chart-container {
+            width: 40%; /* Taille du conteneur du graphique */
+            margin: 30px auto; /* Centrage horizontal et espacement vertical */
+            display: none;
+        }
+        /* Style de la barre de navigation */
+        .navbar-custom {
+            position: fixed;
+            width: 250px;
+            height: 100%;
+            background-color: #333;
+            color: white;
+            transition: width 0.3s ease;
+            overflow: hidden;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            padding-top: 20px;
+        }
+
+        /* Bouton pour rabattre la barre */
+        .toggle-btn {
+            position: absolute;
+            top: 10px;
+            right: -20px;
+            background-color: #333;
+            color: white;
+            font-size: 18px;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 50%;
+            z-index: 10;
+        }
+
+        /* Style des liens de navigation */
+        .navbar-custom a {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+
+        .navbar-custom a i {
+            margin-right: 10px; /* Espacement entre icône et texte */
+        }
+
+        .navbar-custom a:hover {
+            background-color: #444;
+        }
+
+        /* Style des sous-menus */
+        .dropdown-content {
+            display: none;
+            background-color: #444;
+            padding-left: 20px;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown.active .dropdown-content {
+            display: block;
+        }
+
+        /* Styles lorsque la barre est réduite */
+        .navbar-custom.collapsed {
+            width: 70px;
+        }
+
+        .navbar-custom.collapsed a {
+            justify-content: center;
+        }
+
+        .navbar-custom.collapsed a span {
+            display: none;
+        }
+
+        /* Rendre le tableau réactif */
+        .table-responsive {
+            overflow-x: auto; /* Permet de faire défiler horizontalement */
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #1fb89b;
+            color: white;
+        }
+
+        td {
+            word-wrap: break-word;
+        }
+
+        th, td {
+            max-width: 150px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        /* Ajustements responsives */
+        @media (max-width: 768px) {
+            .navbar-custom {
+                width: 100%;
+                height: auto;
+                position: static;
+            }
+            .navbar-custom.collapsed {
+                width: 100%;
+            }
+            .toggle-btn {
+                right: 10px;
+            }
+
+            .table-responsive {
+                -webkit-overflow-scrolling: auto;
+            }
+         
+        }
+
+        /* Style de la barre de recherche et du bouton */
+        .search-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .search-container input[type="text"] {
+            width: 300px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .add-button {
+            background-color: #1fb89b;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .add-button:hover {
+            background-color: #17a481;
+        }
+        .dropdown-content {
+            display: none;
+            background-color: #444;
+            padding-left: 20px;
+        }
+        .dropdown:hover .dropdown-content,
+        .dropdown.active .dropdown-content {
+            display: block;
+        }
+        /* Style des boutons Modifier et Supprimer avec icônes */
+        .action-button {
+            padding: 5px 10px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .edit-button {
+            background-color: #4CAF50; /* Vert pour Modifier */
+        }
+        .edit-button i {
+            color: white; /* Icon color */
+        }
+        .edit-button:hover {
+            background-color: #45a049;
+        }
+        .delete-button {
+            background-color: #f44336; /* Rouge pour Supprimer */
+        }
+        .delete-button i {
+            color: white; /* Icon color */
+        }
+        .delete-button:hover {
+            background-color: #da190b;
+        }
+        
+        /* Conteneur des boutons */
+        .button-group {
+            display: flex;
+            gap: 10px; /* Espacement entre les boutons */
+        }
+    
+        /* Style des boutons généraux */
+        .action-button {
+            border: none;
+            padding: 8px 12px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white; /* Texte blanc pour tous les boutons */
+        }
+    
+        /* Icônes des boutons */
+        .action-button i {
+            margin-right: 5px; /* Espacement entre l'icône et le texte */
+            font-size: 16px; /* Taille des icônes */
+        }
+    
+        /* Bouton Modifier (bleu) */
+        .edit-button {
+            background-color: #007bff; /* Bleu */
+        }
+        .edit-button:hover {
+            background-color: #0056b3;
+        }
+    
+        /* Bouton Supprimer (rouge) */
+        .delete-button {
+            background-color: #dc3545; /* Rouge */
+        }
+        .delete-button:hover {
+            background-color: #c82333;
+        }
+    
+        /* Bouton Informations (gris) */
+        .info-button {
+            background-color: #6c757d; /* Gris */
+        }
+        .info-button:hover {
+            background-color: #5a6268;
+        }
+    
+        /* Bouton Imprimer (vert) */
+        .print-button {
+            background-color: #28a745; /* Vert */
+        }
+        .print-button:hover {
+            background-color: #218838;
+        }
+
+        /* Bouton Imprimer (vert) */
+        .print-button {
+            background-color: #28a745; /* Vert */
+        }
+
+        .print-button:hover {
+            background-color: #218838;
+        }
+
+        .print-button i {
+            margin-right: 5px; /* Espacement entre l'icône et le texte */
+            font-size: 16px; /* Taille des icônes */
+        }
+
+        /* Bouton Information (bleu) */
+        .info-button {
+            background-color: #17a2b8; /* Bleu */
+        }
+
+        .info-button:hover {
+            background-color: #138496;
+        }
+
+        .info-button i {
+            margin-right: 5px; /* Espacement entre l'icône et le texte */
+            font-size: 16px; /* Taille des icônes */
+        }
+
+        /* Style du titre */
+        .titre, .sous-titre {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+        }
+        .container  {
+            margin-top: 5rem; /* Pour ajouter un peu de marge en haut */
+            margin-left: 280px; /* Par défaut, margin de 280px pour les grands écrans */
+        }
+    
+        /* Ajustement pour les écrans plus petits (tablettes et mobiles) */
+        @media (max-width: 768px) {
+            .container  {
+                margin-left: 0; /* Pas de marge à gauche pour les écrans plus petits */
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="navbar-custom" id="navbar">
+        <img src="{% static 'personnel/images/MNDPT.png' %}" alt="Gestion des Personnels" class="img-fluid w-100 mb-3">
+        <a href="{% url 'acceuil' %}"><i class="fas fa-home"></i><span>Accueil</span></a>
+        <div class="dropdown">
+            <a href="#" onclick="toggleDropdown(this)"><i class="fas fa-sitemap"></i><span>Directions</span></a>
+            <div class="dropdown-content">
+                <a href="{% url 'hierarchie' %}"><i class="fas fa-project-diagram"></i><span>Hiérarchie des directions</span></a>
+                <a href="{% url 'listDir' %}"><i class="fas fa-list-alt"></i><span>Liste des directions</span></a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <a href="#" onclick="toggleDropdown(this)"><i class="fas fa-user-cog"></i><span>Opérations RH</span></a>
+            <div class="dropdown-content">
+                <a href="{% url 'affectation' %}"><i class="fas fa-map-marker-alt"></i><span>Afféctation</span></a>
+                <a href="{% url 'detachement' %}"><i class="fas fa-exchange-alt"></i><span>Détachement</span></a>
+                <a href="{% url 'migration' %}"><i class="fas fa-exchange-alt"></i><span>Migration</span></a>
+                <a href="{% url 'reclassement' %}"><i class="fas fa-undo"></i><span>Reclassement</span></a>
+                <a href="{% url 'integration' %}"><i class="fas fa-user-plus"></i><span>Intégration</span></a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <a href="#" onclick="toggleDropdown(this)"><i class="fas fa-chart-bar"></i><span>Statistique</span></a>
+            <div class="dropdown-content">
+                <a href="{% url 'stat_personnel' %}"><i class="fas fa-users"></i><span>Personnels</span></a>
+                <a href="{% url 'stat_qualification' %}"><i class="fas fa-graduation-cap"></i><span>Qualification</span></a>
+                <a href="{% url 'stat_enfant' %}"><i class="fas fa-child"></i><span>Enfant</span></a>
+                <a href="{% url 'stat_fonction' %}"><i class="fas fa-briefcase"></i><span>Fonction</span></a>
+            </div>
+        </div>
+        <a href="{% url 'IA' %}"><i class="fas fa-brain"></i><span>IA</span></a>
+        <div class="dropdown">
+            <a href="#" onclick="toggleDropdown(this)"><i class="fas fa-cogs"></i><span>Administration</span></a>
+            <div class="dropdown-content">
+                <a href="{% url 'utilisateur' %}"><i class="fas fa-user-shield"></i><span>Compte utilisateur</span></a>
+                <a href="{% url 'categorie' %}"><i class="fas fa-th-list"></i><span>Catégorie</span></a>
+                <a href="{% url 'corps' %}"><i class="fas fa-user-tie"></i><span>Corps</span></a>
+                <a href="{% url 'budget' %}"><i class="fas fa-money-bill-wave"></i><span>Budget</span></a>
+                <a href="{% url 'fonction' %}"><i class="fas fa-tasks"></i><span>Fonctions</span></a>
+                <a href="{% url 'referentiel' %}"><i class="fas fa-book"></i><span>Référentiel d'indice EQUI-ECD</span></a>
+            </div>
+        </div>
+        <a href=""><i class="fas fa-sign-out-alt"></i><span>Déconnexion</span></a>
+    </div>
+    
+    <div class="container mt-5" >
+        <div class="titre">
+            <h1 style = "color : #1fb89b">Statistique par fonction </h1>
+        </div>
+            <button id="show-chart">Afficher le Diagramme</button>
+            <div class="result" id="result"></div>
+        <div id="chart-container">
+            <canvas id="myChart"></canvas>
+        </div>
+        <div class="table-responsive">
+        <table id="directionsTable">
+            <thead>
+                <tr>
+                    <th>N°</th>
+                    <th>Nom & Prénom</th>
+                    <th>Fonction</th>
+                    <th>Corps</th>
+                    <th>Date d'Entrée</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Jean Dupont</td>
+                    <td>Directeur</td>
+                    <td>Administration</td>
+                    <td>01/01/2020</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Marie Durand</td>
+                    <td>Secrétaire</td>
+                    <td>Finance</td>
+                    <td>15/03/2019</td>
+                </tr>
+            </tbody>
+        </div>
+    </div>
+        
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function toggleNavbar() {
+            const navbar = document.getElementById("navbar");
+            navbar.classList.toggle("collapsed");
+        }
+
+        function toggleDropdown(element) {
+            const dropdown = element.nextElementSibling;
+            dropdown.classList.toggle("active");
+        }
+
+        const chartContainer = document.getElementById('chart-container');
+        const showChartButton = document.getElementById('show-chart');
+        showChartButton.addEventListener('click', function() {
+            chartContainer.style.display = chartContainer.style.display === 'block' ? 'none' : 'block';
+            createChart(); // Créer le graphique lorsqu'il est affiché
+        });
+
+        // Fonction pour créer le diagramme avec Chart.js (Diagramme en cercle)
+        function createChart() {
+            var ctx = document.getElementById('myChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie', // Type du graphique circulaire
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'], // Labels des mois
+                    datasets: [{
+                        label: 'Nombre de Personnels',
+                        data: [10, 15, 20, 25, 30], // Données de l'exemple
+                        backgroundColor: ['#1fb89b', '#f39c12', '#e74c3c', '#3498db', '#9b59b6'], // Couleurs du graphique
+                        borderColor: '#fff',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top', // Position de la légende
+                        }
+                    }
+                }
+            });
+        }
+
+        function showSelection() {
+            const select = document.getElementById('mySelect');
+            const result = document.getElementById('result');
+            const selectedOption = select.options[select.selectedIndex].text;
+            result.textContent = 'Vous avez sélectionné : ' + selectedOption;
+        }
+    </script>
+</body>
+</html>

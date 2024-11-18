@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Acceuil</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Style de la barre de navigation */
+        .navbar-custom {
+            position: fixed;
+            width: 250px;
+            height: 100%;
+            background-color: #333;
+            color: white;
+            transition: width 0.3s ease;
+            overflow: hidden;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            padding-top: 20px;
+        }
+
+        /* Bouton pour rabattre la barre */
+        .toggle-btn {
+            position: absolute;
+            top: 10px;
+            right: -20px;
+            background-color: #333;
+            color: white;
+            font-size: 18px;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 50%;
+            z-index: 10;
+        }
+
+        /* Style des liens de navigation */
+        .navbar-custom a {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+
+        .navbar-custom a i {
+            margin-right: 10px; /* Espacement entre icône et texte */
+        }
+
+        .navbar-custom a:hover {
+            background-color: #444;
+        }
+
+        /* Style des sous-menus */
+        .dropdown-content {
+            display: none;
+            background-color: #444;
+            padding-left: 20px;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown.active .dropdown-content {
+            display: block;
+        }
+
+        /* Styles lorsque la barre est réduite */
+        .navbar-custom.collapsed {
+            width: 70px;
+        }
+
+        .navbar-custom.collapsed a {
+            justify-content: center;
+        }
+
+        .navbar-custom.collapsed a span {
+            display: none;
+        }
+
+        /* Style du titre */
+        .titre, .sous-titre {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+        }
+
+        /* Styles responsives */
+        @media (max-width: 768px) {
+            .navbar-custom {
+                width: 100%;
+                height: auto;
+                position: static;
+            }
+            .navbar-custom.collapsed {
+                width: 100%;
+            }
+            .toggle-btn {
+                right: 10px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="navbar-custom" id="navbar">
+        <img src="{% static 'personnel/images/MNDPT.png' %}" alt="Gestion des Personnels" class="img-fluid w-100 mb-3">
+        <a href="{% url 'acceuil' %}"><i class="fas fa-home"></i><span>Accueil</span></a>
+        <div class="dropdown">
+            <a href="#" onclick="toggleDropdown(this)"><i class="fas fa-sitemap"></i><span>Directions</span></a>
+            <div class="dropdown-content">
+                <a href="{% url 'hierarchie' %}"><i class="fas fa-project-diagram"></i><span>Hiérarchie des directions</span></a>
+                <a href="{% url 'listDir' %}"><i class="fas fa-list-alt"></i><span>Liste des directions</span></a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <a href="#" onclick="toggleDropdown(this)"><i class="fas fa-user-cog"></i><span>Opérations RH</span></a>
+            <div class="dropdown-content">
+                <a href="{% url 'affectation' %}"><i class="fas fa-map-marker-alt"></i><span>Afféctation</span></a>
+                <a href="{% url 'detachement' %}"><i class="fas fa-exchange-alt"></i><span>Détachement</span></a>
+                <a href="{% url 'migration' %}"><i class="fas fa-exchange-alt"></i><span>Migration</span></a>
+                <a href="{% url 'reclassement' %}"><i class="fas fa-undo"></i><span>Reclassement</span></a>
+                <a href="{% url 'integration' %}"><i class="fas fa-user-plus"></i><span>Intégration</span></a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <a href="#" onclick="toggleDropdown(this)"><i class="fas fa-chart-bar"></i><span>Statistique</span></a>
+            <div class="dropdown-content">
+                <a href="{% url 'stat_personnel' %}"><i class="fas fa-users"></i><span>Personnels</span></a>
+                <a href="{% url 'stat_qualification' %}"><i class="fas fa-graduation-cap"></i><span>Qualification</span></a>
+                <a href="{% url 'stat_enfant' %}"><i class="fas fa-child"></i><span>Enfant</span></a>
+                <a href="{% url 'stat_fonction' %}"><i class="fas fa-briefcase"></i><span>Fonction</span></a>
+            </div>
+        </div>
+        <a href="{% url 'IA' %}"><i class="fas fa-brain"></i><span>IA</span></a>
+        <div class="dropdown">
+            <a href="#" onclick="toggleDropdown(this)"><i class="fas fa-cogs"></i><span>Administration</span></a>
+            <div class="dropdown-content">
+                <a href="{% url 'utilisateur' %}"><i class="fas fa-user-shield"></i><span>Compte utilisateur</span></a>
+                <a href="{% url 'categorie' %}"><i class="fas fa-th-list"></i><span>Catégorie</span></a>
+                <a href="{% url 'corps' %}"><i class="fas fa-user-tie"></i><span>Corps</span></a>
+                <a href="{% url 'budget' %}"><i class="fas fa-money-bill-wave"></i><span>Budget</span></a>
+                <a href="{% url 'fonction' %}"><i class="fas fa-tasks"></i><span>Fonctions</span></a>
+                <a href="{% url 'referentiel' %}"><i class="fas fa-book"></i><span>Référentiel d'indice EQUI-ECD</span></a>
+            </div>
+        </div>
+        <a href=""><i class="fas fa-sign-out-alt"></i><span>Déconnexion</span></a>
+    </div>
+    
+    <div class="container mt-5">
+        <img src="{% static 'personnel/images/Header.jpeg' %}" alt="Gestion des Personnels" class="img-fluid mx-auto d-block" style="border-radius: 20px; max-width: 60%; height: auto;">
+        <h1 class="titre">Bienvenue dans la Gestion des Personnels</h1>
+        <p class="sous-titre">du Ministère du Développement Numérique, de la Transformation Digitale, des Postes et des Télécommunications</p>
+        <img src="{% static 'personnel/images/personnel.png' %}" alt="Gestion des Personnels" class="img-fluid mx-auto d-block" style="border-radius: 20px; max-width: 60%; height: auto;">
+    </div>
+    
+    <script>
+        function toggleDropdown(element) {
+            const dropdown = element.closest('.dropdown');
+            dropdown.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
