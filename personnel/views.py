@@ -4,9 +4,20 @@ from django.contrib import messages
 import logging
 import pandas as pd
 from django.http import JsonResponse
-import os
+from django.contrib import messages
+from django.contrib.auth.hashers import check_password
 from django.conf import settings
+from django.contrib.auth import logout
 
+
+from personnel.models import Personne
+
+
+logger = logging.getLogger(__name__)
+
+from django.contrib import messages
+from django.shortcuts import render, redirect
+import logging
 
 logger = logging.getLogger(__name__)
 
@@ -16,17 +27,23 @@ def login_view(request):
         password = request.POST['password']
 
         logger.info(f"Username entered: {username}")
-        logger.info(f"Password entered: {password}")
 
-        if username == "Nomena" and password == "1234":
-            messages.success(request, 'Connexion réussie!')
-            logger.info("Login successful for user Nomena")
-            return redirect('acceuil')
-        else:
-            messages.error(request, 'Nom d\'utilisateur ou mot de passe incorrect.')
-            logger.info("Login failed: incorrect credentials")
+        try:
+            user = Personne.objects.get(login=username)
+            
+            if password == user.mot_de_passe:
+                logger.info(f"Login successful for user {username}")
+                return redirect('acceuil')  
+            else:
+                messages.error(request, 'Mot de passe incorrect.')
+                logger.info(f"Login failed: incorrect password for user {username}")
+
+        except Personne.DoesNotExist:
+            messages.error(request, 'Utilisateur introuvable.')
+            logger.info(f"Login failed: user {username} not found")
             
     return render(request, 'personnel/login.html')
+
 
 def acceuil_view(request):
     return render(request, 'personnel/acceuil.html') 
@@ -118,3 +135,8 @@ def fonction_view(request):
 
 def referentiel_view(request):
     return render(request, 'personnel/referentiel.html') 
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')  

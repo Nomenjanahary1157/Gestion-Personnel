@@ -61,13 +61,15 @@ class Personne(models.Model):
     nom_prenoms = models.CharField(max_length=255)
     numéro = models.IntegerField(blank=True, null=True)
     mail = models.CharField(max_length=50, blank=True, null=True)
+    login = models.CharField(unique=True, max_length=50)  
+    mot_de_passe = models.CharField(max_length=255)       
     im = models.CharField(unique=True, max_length=50, blank=True, null=True)
-    idfonction = models.ForeignKey(Fonction, models.DO_NOTHING, db_column='idfonction', blank=True, null=True)
-    idcorps = models.ForeignKey(Corps, models.DO_NOTHING, db_column='idcorps', blank=True, null=True)
-    idqualification = models.ForeignKey(Qualification, models.DO_NOTHING, db_column='idqualification', blank=True, null=True)
-    iddirection = models.ForeignKey(Direction, models.DO_NOTHING, db_column='iddirection', blank=True, null=True)
-    idpersonnel = models.ForeignKey(Personnel, models.DO_NOTHING, db_column='idpersonnel', blank=True, null=True)
-    idposition = models.ForeignKey(Position, models.DO_NOTHING, db_column='idposition', blank=True, null=True)
+    idfonction = models.ForeignKey('Fonction', models.DO_NOTHING, db_column='idfonction', blank=True, null=True)
+    idcorps = models.ForeignKey('Corps', models.DO_NOTHING, db_column='idcorps', blank=True, null=True)
+    idqualification = models.ForeignKey('Qualification', models.DO_NOTHING, db_column='idqualification', blank=True, null=True)
+    iddirection = models.ForeignKey('Direction', models.DO_NOTHING, db_column='iddirection', blank=True, null=True)
+    idpersonnel = models.ForeignKey('Personnel', models.DO_NOTHING, db_column='idpersonnel', blank=True, null=True)
+    idposition = models.ForeignKey('Position', models.DO_NOTHING, db_column='idposition', blank=True, null=True)
     photo = models.CharField(max_length=200, blank=True, null=True)
     cin = models.CharField(unique=True, max_length=50, blank=True, null=True)
     date_entree = models.DateField(blank=True, null=True)
@@ -77,6 +79,7 @@ class Personne(models.Model):
     class Meta:
         managed = False
         db_table = 'personne'
+
 
 class Integration(models.Model):
     date_effet = models.DateField(blank=True, null=True)

@@ -23,4 +23,5 @@ urlpatterns = [
     path('fonction/', views.fonction_view, name='fonction'),
     path('referentiel/', views.referentiel_view, name='referentiel'),
     path('IA/', views.IA_view, name='IA'),
+    path('logout/', views.logout_view, name='logout'),
 ]

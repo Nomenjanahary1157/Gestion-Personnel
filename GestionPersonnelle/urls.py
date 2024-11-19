@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.shortcuts import redirect
 
-from personnel.views import IA_view, acceuil_view, affect_view, budget_view, categorie_view, corps_view, detache_view, fonction_view, hierarchie_view, integration_view, listDir_view, login_view, migration_view, reclassement_view, referentiel_view, statistique_enfant_view, statistique_fonction_view, statistique_pers_view, statistique_qualification_view, users_list, utilisateur_view
+from personnel.views import IA_view, acceuil_view, affect_view, budget_view, categorie_view, corps_view, detache_view, fonction_view, hierarchie_view, integration_view, listDir_view, login_view, logout_view, migration_view, reclassement_view, referentiel_view, statistique_enfant_view, statistique_fonction_view, statistique_pers_view, statistique_qualification_view, users_list, utilisateur_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,6 +28,7 @@ urlpatterns = [
     path('gestionpersonnelMNDPT/personnel/budget/', budget_view, name='budget'),
     path('gestionpersonnelMNDPT/personnel/fonction/', fonction_view, name='fonction'),
     path('gestionpersonnelMNDPT/personnel/referentiel/', referentiel_view, name='referentiel'),
+    path('gestionpersonnelMNDPT/personnel/logout/', logout_view, name='logout'),
     
     path('', lambda request: redirect(login_view)),  
 ]
