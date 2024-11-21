@@ -357,50 +357,50 @@
         <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i><span>Déconnexion</span></a>
     </div>
     
+    
     <div class="container mt-5" >
-
         <h1>Les Détachements</h1>
         <div class="search-container">
             <input type="text" placeholder="Rechercher...">
             <button class="add-button">Ajouter</button>
         </div>
-        <div class="table-responsive">
-        <table id="directionsTable">
-            <thead>
-                <tr>
-                    <th>IM</th>
-                    <th>Nom et prénoms</th>
-                    <th>Date decision</th>
-                    <th>Direction</th>
-                    <th>Lieu</th>
-                    <th>Motif</th>
-                    <th>Commentaires</th>
-                    <th>Date détachement</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>296428</td>
-                    <td>RAJOBSON Johary Hoela</td>
-                    <td>07-11-2024</td>
-                    <td>DRH</td>
-                    <td>SENAT</td>
-                    <td>SENAT</td>
-                    <td>SENAT</td>
-                    <td>2020-11-01</td>
-                    <td>En cours</td>
-                    <td style="width:120px">
-                        <button class="action-button edit-button"><i class="fas fa-edit"></i> </button>
-                        <button class="action-button terminate-button"><i class="fas fa-check"></i> </button>
-                        <button class="action-button info-button" ><i class="fas fa-info-circle"></i> </button>
-                    </td>
-                </tr>
-            </tbody>
+        <div class="accordion" id="tableAccordion">
+            <div class="row mt-4">
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Détachements
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#tableAccordion">
+                            <div class="card-body">
+                                <p><strong>IM :</strong> </p>
+                                <p><strong>Nom et prénoms :</strong> </p>
+                                <p><strong>Date decision :</strong> </p>
+                                <p><strong>Direction :</strong> </p>
+                                <p><strong>Lieu :</strong> </p>
+                                <p><strong>Motif :</strong> </p>
+                                <p><strong>Commentaires :</strong> </p>
+                                <p><strong>Date détachement :</strong> </p>
+                                <p><strong>Status :</strong> </p>
+                                <p class="button-group">
+                                    <button class="action-button edit-button"><i class="fas fa-edit"></i> </button>
+                                    <button class="action-button terminate-button"><i class="fas fa-check"></i> </button>
+                                    <button class="action-button info-button" ><i class="fas fa-info-circle"></i> </button></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-        
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         function toggleDropdown(element) {
             const dropdown = element.closest('.dropdown');

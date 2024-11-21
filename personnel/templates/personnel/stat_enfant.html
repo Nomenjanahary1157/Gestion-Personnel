@@ -381,36 +381,36 @@
         <div id="chart-container">
             <canvas id="myChart"></canvas>
         </div>
-        <div class="table-responsive">
-        <table id="directionsTable">
-            <thead>
-                <tr>
-                    <th>N°</th>
-                    <th>Nom & Prénom</th>
-                    <th>Fonction</th>
-                    <th>Corps</th>
-                    <th>Date d'Entrée</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Jean Dupont</td>
-                    <td>Directeur</td>
-                    <td>Administration</td>
-                    <td>01/01/2020</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Marie Durand</td>
-                    <td>Secrétaire</td>
-                    <td>Finance</td>
-                    <td>15/03/2019</td>
-                </tr>
-            </tbody>
+
+        <div class="accordion" id="tableAccordion">
+            <div class="row mt-4">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Enfant
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#tableAccordion">
+                            <div class="card-body">
+                                <p><strong>N°:</strong> </p>
+                                <p><strong>Nom & Prénom :</strong> </p>
+                                <p><strong>Fonction :</strong> </p>
+                                <p><strong>Corps :</strong> </p>
+                                <p><strong>Date d'Entrée :</strong> </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-        
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         function toggleNavbar() {

@@ -364,29 +364,35 @@
             <input type="text" placeholder="Rechercher...">
             <button class="add-button">Ajouter</button>
         </div>
-        <div class="table-responsive">
-        <table id="directionsTable">
-            <thead>
-                <tr>
-                    <th>Corps</th>
-                    <th>Catégorie</th>
-                    <th>Type </th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Indefini</td>
-                    <td>categorie 0</td>
-                    <td>NP</td>
-                    <td>
-                        <button class="action-button edit-button"><i class="fas fa-user"></i> Personnel</button>
-                    </td>
-                </tr>
-            </tbody>
+        <div class="accordion" id="tableAccordion">
+            <div class="row mt-4">
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Corps
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#tableAccordion">
+                            <div class="card-body">
+                                <p><strong>Corps :</strong> </p>
+                                <p><strong>Catégorie :</strong> </p>
+                                <p><strong>Type :</strong> </p>
+                                <p class="button-group">
+                                    <button class="action-button edit-button"><i class="fas fa-user"></i> Personnel</button>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-        
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         function toggleDropdown(element) {
             const dropdown = element.closest('.dropdown');

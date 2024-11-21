@@ -364,31 +364,39 @@
             <input type="text" placeholder="Rechercher...">
             <button class="add-button">Ajouter</button>
         </div>
-        <div class="table-responsive">
-        <table id="directionsTable">
-            <thead>
-                <tr>
-                    <th>Nom de l'utilisateur</th>
-                    <th>Mot de passe</th>
-                    <th>Rôle </th>
-                    <th>Personnel assossié </th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>adminrh</td>
-                    <td>1234</td>
-                    <td>Administrateur</td>
-                    <td>Jean</td>
-                    <td>
-                        <button class="action-button edit-button"><i class="fas fa-edit"></i></button>
-                    </td>
-                </tr>
-            </tbody>
+
+        <div class="accordion" id="tableAccordion">
+            <div class="row mt-4">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Utilisateur
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#tableAccordion">
+                            <div class="card-body">
+                                <p><strong>Nom de l'utilisateur :</strong> </p>
+                                <p><strong>Mot de passe :</strong> </p>
+                                <p><strong>Rôle :</strong> </p>
+                                <p><strong>Personnel assossié :</strong> </p>
+                                <p class="button-group">
+                                    <button class="action-button edit-button"><i class="fas fa-edit"></i></button>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-        
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     <script>
         function toggleDropdown(element) {
             const dropdown = element.closest('.dropdown');

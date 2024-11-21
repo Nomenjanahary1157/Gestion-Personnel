@@ -364,48 +364,46 @@
             <input type="text" placeholder="Rechercher...">
             <button class="add-button">Ajouter</button>
         </div>
-        <div class="table-responsive">
-        <table id="directionsTable">
-            <thead>
-                <tr>
-                    <th>IM</th>
-                    <th>Corps</th>
-                    <th>Direction</th>
-                    <th>Photo</th>
-                    <th>Nom et prénoms</th>
-                    <th>Sexe</th>
-                    <th>Date d'entrée</th>
-                    <th>C E</th>
-                    <th>Date d'effet</th>
-                    <th>Fonction</th>
-                    <th>Qualification</th>
-                    <th>Catégorie</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>296428</td>
-                    <td>Encadreur</td>
-                    <td>DRH</td>
-                    <td></td>
-                    <td>RAJOBSON Johary Hoela</td>
-                    <td>Homme</td>
-                    <td>2002-12-26</td>
-                    <td>P/2</td>
-                    <td>2020-11-01</td>
-                    <td>Gardien</td>
-                    <td>BAE</td>
-                    <td>Catégorie 3</td>
-                    <td style="width:120px">
-                        <button class="action-button reclassement-button"><i class="fas fa-retweet"></i></button>
-                        <button class="action-button info-button" ><i class="fas fa-info-circle"></i> </button>
-                    </td>
-                </tr>
-            </tbody>
+
+        <div class="accordion" id="tableAccordion">
+            <div class="row mt-4">
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Reclassements
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#tableAccordion">
+                            <div class="card-body">
+                                <p><strong>IM :</strong> </p>
+                                <p><strong>Corps :</strong> </p>
+                                <p><strong>Direction :</strong> </p>
+                                <p><strong>Nom et prénoms :</strong> </p>
+                                <p><strong>Sexe :</strong> </p>
+                                <p><strong>Date d'entrée :</strong> </p>
+                                <p><strong>CE :</strong> </p>
+                                <p><strong>Date d'effet :</strong> </p>
+                                <p><strong>Fonction :</strong> </p>
+                                <p><strong>Qualification :</strong> </p>
+                                <p><strong>Catégorie :</strong> </p>
+                                <p class="button-group">
+                                    <button class="action-button reclassement-button"><i class="fas fa-retweet"></i></button>
+                                    <button class="action-button info-button" ><i class="fas fa-info-circle"></i> </button>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-        
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         function toggleDropdown(element) {
             const dropdown = element.closest('.dropdown');

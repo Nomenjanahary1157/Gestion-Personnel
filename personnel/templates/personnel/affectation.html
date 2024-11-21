@@ -91,17 +91,6 @@
             display: none;
         }
 
-        /* Rendre le tableau réactif */
-        .table-responsive {
-            overflow-x: auto; /* Permet de faire défiler horizontalement */
-            -webkit-overflow-scrolling: touch;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
 
         th, td {
             padding: 8px 12px;
@@ -136,10 +125,6 @@
             }
             .toggle-btn {
                 right: 10px;
-            }
-
-            .table-responsive {
-                -webkit-overflow-scrolling: auto;
             }
          
         }
@@ -310,6 +295,21 @@
             }
         }
 
+
+        .card-header button {
+            font-weight: bold;
+            text-decoration: none;
+            color: #007bff;
+            width: 100%;
+            text-align: left;
+            padding: 10px;
+        }
+        
+        .card-body {
+            background-color: #f8f9fa;
+            border-top: 1px solid #ddd;
+        }
+        
     </style>
 </head>
 <body>
@@ -363,71 +363,47 @@
             <input type="text" id="searchInput" placeholder="Rechercher une direction..." onkeyup="searchFunction()">
             <button class="add-button">Ajouter une Direction</button>
         </div>
-        <div class="table-responsive">
-            <table id="directionsTable">
-                <thead>
-                    <tr>
-                        <th>Porte</th>
-                        <th>Entité</th>
-                        <th>Description</th>
-                        <th>Adresse</th>
-                        <th>Province</th>
-                        <th>Groupe</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>001</td>
-                        <td>Direction A</td>
-                        <td>Description de la direction A</td>
-                        <td>Adresse A</td>
-                        <td>Province A</td>
-                        <td>Groupe A</td>
-                        <td>
-                            <div class="button-group">
+        <div class="accordion" id="tableAccordion">
+            <div class="row mt-4">
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Direction A - Province A
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#tableAccordion">
+                            <div class="card-body">
+                                <p><strong>Porte :</strong> 001</p>
+                                <p><strong>Entité :</strong> Direction A</p>
+                                <p><strong>Description :</strong> Description de la direction A</p>
+                                <p><strong>Adresse  :</strong> Adresse A</p>
+                                <p><strong>Province :</strong> Province A</p>
+                                <p><strong>Groupe :</strong> Groupe A</p>
+                                <p class="button-group">
                                 <button class="action-button edit-button"><i class="fas fa-edit"></i> </button>
                                 <button class="action-button delete-button"><i class="fas fa-trash"></i> </button>
                                 <button class="action-button print-button"><i class="fas fa-print"></i> </button>
-                                <button class="action-button info-button" onclick="showInfo()"><i class="fas fa-info-circle"></i> </button> <!-- Nouveau bouton Information -->
+                                <button class="action-button info-button" onclick="showInfo()"><i class="fas fa-info-circle"></i> </button>
+                                </p>
                             </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-        
+           
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
     <script>
         function toggleDropdown(element) {
             const dropdown = element.closest('.dropdown');
             dropdown.classList.toggle('active');
-        }
-        function searchFunction() {
-            var input, filter, table, tr, td, i, txtValue;
-            input = document.getElementById('searchInput');
-            filter = input.value.toUpperCase();
-            table = document.getElementById("directionsTable");
-            tr = table.getElementsByTagName("tr");
-            
-            for (i = 1; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName("td");
-                var found = false;
-                for (var j = 0; j < td.length; j++) {
-                    if (td[j]) {
-                        txtValue = td[j].textContent || td[j].innerText;
-                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                            found = true;
-                            break;
-                        }
-                    }
-                }
-                if (found) {
-                    tr[i].style.display = "";
-                } else {
-                    tr[i].style.display = "none";
-                }
-            }
         }
     </script>
 </body>
